@@ -20,5 +20,5 @@ def rank(links):
     # index of evect corresponding to 1
     # i = np.where(np.isclose(evals, 1.0))
     i = next(i for i, e in enumerate(evals) if np.isclose(e, 1.0)) # faster, from https://stackoverflow.com/questions/41022765
-    v = evects[i]
-    return [i for i, e in sorted(enumerate(v), key=lambda x: x[1], reverse=True) # consider using itemgetter from operators
+    v = evects[:, i]
+    return [i for i, e in sorted(enumerate(v), key=lambda x: x[1], reverse=True)] # consider using itemgetter from operators
