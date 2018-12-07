@@ -1,0 +1,126 @@
+% Homework LaTeX Template
+% original version by Sayan Chaudhry (sayanc)
+% modified by Tan Yan (tanyan)
+
+\documentclass[11pt]{article}
+
+\title{PageRank}
+\author{Tan Yan \and Daniel Kim}
+
+% Useful Packages
+\usepackage{amsmath}  % Packages to make typesetting math
+\usepackage{amssymb}  %   stuff and symbols easy by the
+\usepackage{amsthm}   %   American Mathematical Society
+\usepackage{textcomp} % Package for some special symbols
+\usepackage{fancyhdr} % Package to make pretty headers
+\usepackage[latin1]{inputenc}
+\usepackage{enumerate}
+\usepackage[hang,flushmargin]{footmisc}
+\usepackage{amsfonts}
+\usepackage{hyperref} % Package to add image support
+\hypersetup{          
+    colorlinks=true,  
+    linkcolor=red,    
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+\usepackage{graphicx} % Package to add image support
+\graphicspath{        
+    {assets/}         % Upload all images in assets/
+}
+
+% Theorem Styles
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+% Page Setup
+\oddsidemargin0cm
+\topmargin-2cm
+\textwidth16.5cm
+\textheight23.5cm
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 1pt}
+\setlength{\headsep}{1.7em}
+\setlength{\headheight}{30pt}
+\renewcommand{\baselinestretch}{1.25}
+
+% Math Commands :: General
+\newcommand{\micdrop}{\hfill \qedsymbol}
+\newcommand{\abs}[1]{\left| #1\right|}
+\newcommand{\floor}[1]{\left\lfloor#1\right\rfloor}
+\newcommand{\Lap}[1]{\mathcal{L}\left\{#1\right\}}
+
+% Math Commands :: Proofs 
+\newcommand{\wts}{\text{We want to show that }}
+\newcommand{\st}{\text{ such that }}
+\newcommand{\afsoc}{\text{Assume for the sake of contradiction that }}
+\newcommand{\Wlog}{\text{Without loss of generality, assume that }}
+
+% Math Commands :: Sets
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\U}{\mathcal{U}}
+\renewcommand{\emptyset}{\varnothing}
+
+% Math Commands :: Induction
+\newcommand{\rhs}{\texttt{RHS}}
+\newcommand{\lhs}{\texttt{LHS}}
+\newcommand{\bc}{\texttt{Base Case}}
+\newcommand{\bcs}{\texttt{Base Cases}}
+\newcommand{\ih}{\texttt{Induction Hypothesis}}
+\newcommand{\is}{\texttt{Induction Step}}
+
+% Math Commands :: Probability
+\newcommand{\p}[1]{\mathbb{P}\left\{#1\right\}}
+\newcommand{\e}[1]{\mathbb{E}\left[#1\right]}
+\newcommand{\var}[1]{\mathrm{Var}\left[#1\right]}
+
+% Math Commands :: Linear Algebra
+\DeclareMathOperator{\Diam}{diam}
+\newcommand{\diam}[1]{\Diam\left(#1\right)}
+\DeclareMathOperator{\nul}{Null}
+\newcommand{\Null}[1]{\nul\left(#1\right)}
+\renewcommand{\vec}[1]{\mathbf{#1}}
+\newcommand{\threevec}[3]{\left[\begin{array}{r} #1 \\ #2 \\ #3\end{array}\right]}
+\newcommand{\fourvec}[4]{\left[\begin{array}{r} #1 \\ #2 \\ #3\\#4\end{array}\right]}
+\DeclareMathOperator{\Rank}{rank}
+\newcommand{\rank}[1]{\Rank\left(#1\right)}
+\DeclareMathOperator{\Sp}{Span}
+\renewcommand{\sp}[1]{\Sp\left\{#1\right\}}
+\DeclareMathOperator{\col}{Col}
+\newcommand{\Col}[1]{\col\left(#1\right)}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Enter a short summary here. What topic do you want to investigate and why? What experiment did you perform? What were your main results and conclusion?
+\end{abstract}
+
+\section{Introduction}
+
+\section{Definitions}
+
+\section{Main Ideas}
+
+\section{Results}
+
+\section{Conclusion}
+
+\begin{thebibliography}{9}
+\bibitem{nano3}
+    K. Grove-Rasmussen og Jesper Nygård,
+    \emph{Kvantefænomener i Nanosystemer}.
+    Niels Bohr Institute \& Nano-Science Center, Københavns Universitet
+
+\end{thebibliography}
+\end{document}
+
+
