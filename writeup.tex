@@ -5,7 +5,7 @@
 \documentclass[11pt]{article}
 
 \title{PageRank}
-\author{Tan Yan \and Daniel Kim}
+\author{Tan Yan \and Daniel Bae}
 
 % Useful Packages
 \usepackage{amsmath}  % Packages to make typesetting math
@@ -17,6 +17,7 @@
 \usepackage{enumerate}
 \usepackage[hang,flushmargin]{footmisc}
 \usepackage{amsfonts}
+\usepackage{listing}
 \usepackage{hyperref} % Package to add image support
 \hypersetup{          
     colorlinks=true,  
@@ -37,6 +38,7 @@
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{example}[theorem]{Example}
+\newtheorem{notation}[theorem]{Notation}
 
 % Page Setup
 \oddsidemargin0cm
@@ -107,18 +109,73 @@ Enter a short summary here. What topic do you want to investigate and why? What 
 \section{Introduction}
 
 \section{Definitions}
+\begin{definition}
+    A stochastic matrix, probability matrix, or Markov transition matrix is ...
+    A column-stochastic or left-stochastic matrix is ...
+\end{definition}
+
+\begin{definition}
+    A positive matrix is a matrix with all positive entries
+\end{definition}
+
+\begin{definition}
+    An Markov transition matrix is said to be irreducible if ...
+    A positive stochastic matrix is necessarily irreducible
+\end{definition}
+
+\begin{definition}
+    Let $\lambda$ denote an eigenvalue of the square matrix $A$ and let $\vec{v}$ denote its corresponding eigenvector, such that $A \vec{v} = \lambda \vec{v}$.
+    A probablistic eigenvector is...
+\end{definition}
+
+\begin{definition}
+    Let $G$ be a directed graph of the webpages, with each webpage as a node and links between the webpages as edges ... such that $G_{ij} = 1$ if 
+\end{definition}
+
+\begin{definition}
+    A dangling node is a node that has no outgoing edges
+\end{definition}
+
+\begin{definition}
+    Let $P$ be the probablistic matrix 
+\end{definition}
+
+\begin{definition}
+    Let $d$ denote the ``damping factor'' ... representing the probability of a web surfer randomly traveling from one page to any other page. $0 \leq d < 1$.
+\end{definition}
+
+\begin{definition}
+    Let $\vec{1}$ 
+\end{definition}
+
+\begin{definition}
+    Let $M$ denote the ``PageRank Matrix'' or ``Google Matrix'' defined by Page and Brin.
+    Define 
+\end{definition}
+
 
 \section{Main Ideas}
 
-\section{Results}
+\begin{theorem}
+    (The Frobenius Theorem) If 
+\end{theorem}
+
+\begin{theorem}
+    (Convergence) 
+\end{theorem}
+
+This implies that after infinitely many random walks, the web surfer is most likely to be on the webpage corresponding to ...
+
+\begin{listing}[python]
+    print("hello world!")
+\end{listing}
+
+% \section{Results}
 
 \section{Conclusion}
 
 \begin{thebibliography}{9}
-\bibitem{nano3}
-    K. Grove-Rasmussen og Jesper Nygård,
-    \emph{Kvantefænomener i Nanosystemer}.
-    Niels Bohr Institute \& Nano-Science Center, Københavns Universitet
+\bibitem{}
 
 \end{thebibliography}
 \end{document}
