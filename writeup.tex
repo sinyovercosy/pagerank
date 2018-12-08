@@ -17,7 +17,7 @@
 \usepackage{enumerate}
 \usepackage[hang,flushmargin]{footmisc}
 \usepackage{amsfonts}
-\usepackage{listing}
+\usepackage{listings}
 \usepackage{hyperref} % Package to add image support
 \hypersetup{          
     colorlinks=true,  
@@ -129,7 +129,9 @@ Enter a short summary here. What topic do you want to investigate and why? What 
 \end{definition}
 
 \begin{definition}
-    Let $G$ be a directed graph of the webpages, with each webpage as a node and links between the webpages as edges ... such that $G_{ij} = 1$ if 
+    Let $G$ be a directed graph of the webpages, with each webpage as a node and links between the webpages as edges ... such that $G_{ij} = 1$ if ...
+    also let $n$ denote the number of nodes ...
+    let $L(i)$ denote the number of outgoing edges ...
 \end{definition}
 
 \begin{definition}
@@ -166,9 +168,18 @@ Enter a short summary here. What topic do you want to investigate and why? What 
 
 This implies that after infinitely many random walks, the web surfer is most likely to be on the webpage corresponding to ...
 
-\begin{listing}[python]
-    print("hello world!")
-\end{listing}
+\begin{lstlisting}[language=python, basicstyle={\small\ttfamily}, numbers=left]
+def build_prob_matrix(adj_list):
+# number of nodes
+n = len(adj_list)
+P = np.zeros((n,n), dtype=float)
+for (j, connected_nodes) in enumerate(adj_list):
+    if connected_nodes: # non-empty
+        P[connected_nodes, j] = 1.0 / len(connected_nodes)
+    else: # dangling node
+        P[:, j] = 1.0 / n
+return P
+\end{lstlisting}
 
 % \section{Results}
 
