@@ -36,7 +36,7 @@
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{definition}[theorem]{Definition}
+\newtheorem{definition}{Definition}
 \newtheorem{example}[theorem]{Example}
 \newtheorem{notation}[theorem]{Notation}
 
@@ -156,16 +156,21 @@ Enter a short summary here. What topic do you want to investigate and why? What 
 \end{definition}
 
 \section{Main Ideas}
+We want to find the PageRank vector, which encodes the probabilities of landing on a particular page provided the network of links between the pages. This is equivalent to finding the stationary distribution of the Markov chain that encodes the link transitions between pages.
 
+In order to prove the existance of the PageRank vector, we first on the Perron-Frobenius Theorem.
 \begin{theorem}
-    (The Frobenius Theorem) If 
+    (Perron-Frobenius Theorem) Consider a $n\times n$ positive column-stochastic matrix $M$. Let $\lambda_1, \lambda_2, \cdots, \lambda_n$ be the eigenvalues of $M$ sorted in decreasing order of magnitude. Then 1 is an eigenvalue with multiplicity 1 such that $\lambda_1=1$ and the corresponding eigenvector is probabilistic.
 \end{theorem}
 
-\begin{theorem}
-    (Convergence) 
-\end{theorem}
+Since the Google matrix $M$ is constructed to be a postitive column-stochastic matrix, by Perron-Frobenius theorem we know that there exists a probabilistic eigenvector $\vec{v}^*$ corresponding to the eigenvalue 1.
 
-This implies that after infinitely many random walks, the web surfer is most likely to be on the webpage corresponding to ...
+The next theorem uses the fact that all of the eigenvectors $\lambda_i$ for $1<i\leq n$ of $M$ are less than $1$ to show that the PageRank vector is equal to $\vec{v}^*$.
+\begin{theorem}
+    (Power Method Convergence Theorem) Let $M$ be a $n\times n$ positive column-stochastic matrix, with $\vec{v}^*$ denosting the probabilstic vector corresponding to 1. Let $z$ be the column vector with all entries equal to $\frac{1}{n}$. Then the sequence $z, Mz, \cdots, M^kz$ as $k\to \infty$ converges to $\vec{v}^*$.    
+\end{theorem}
+Assuming that the random surfer initially has an equal probability of visiting a given page, traversing the network using the information from the Google matrix leads us to the PageRank vector.
+This implies that after infinitely many random walks, the web surfer is most likely to be on the webpage corresponding to the most links.
 
 \begin{lstlisting}[language=python, basicstyle={\small\ttfamily}, numbers=left]
 def build_prob_matrix(adj_list):
