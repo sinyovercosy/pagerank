@@ -38,6 +38,7 @@
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
 \newtheorem{notation}[theorem]{Notation}
 
 % Page Setup
@@ -110,44 +111,106 @@ Enter a short summary here. What topic do you want to investigate and why? What 
 
 \section{Definitions}
 \begin{definition}
-    A stochastic matrix, probability matrix, or Markov transition matrix is ...
-    A column-stochastic or left-stochastic matrix is ...
+    Let $(\Omega, \mathcal{F}, \mathbb{P})$ be a countable probability space, where
+    \begin{enumerate}
+        \item The outcome space $\Omega$ is some countable set of webpages on the internet;
+        \item The set of all possible events $\mathcal{F} = \{ \{\omega\} \mid \omega \in \Omega \}$ is set of all events consisting of exactly one outcome, i.e. the event that a web surfer is on a certain webpage;
+        \item The probability measure $\mathbb{P}$ is a function $\mathcal{F} \to [0,1]$ denoting the probability of the event that a web surfer is on a certain webpage.
+    \end{enumerate}
 \end{definition}
 
 \begin{definition}
-    A positive matrix is a matrix with all positive entries
+    Let a random walk of some countable set of webpages $\Omega$ be a stochastic process on $(\Omega, \mathcal{F}, \mathbb{P})$ defined as follows:
+
+    Let $\Omega$ be enumerated by the set $S = \{0, 1, 2, 3, \ldots\} \subseteq \N$, such that $\Omega = \{\omega_i \mid i \in S\}$.
+
+    Let the index set $T = \{0, 1, 2, 3, \ldots \} = \N$ denote the number of links that the web surfer has clicked on, i.e. the number of times that the web surfer has jumped from one webpage to another.
+    
+    Let $\{X_t : \Omega \to S\}_{t \in T}$ be a family of $S$-valued random variables indexed by $T$ such that
+    $\p{X_t = i}$ corresponds to the probability of the event that the web surfer lands on the $i$-th webpage after clicking on $t$ links or making $t$ jumps from one webpage to another.
+
+    Then $\{X_t : \Omega \to S\}_{t \in T}$ precisely describes a stochastic process on $(\Omega, \mathcal{F}, \mathbb{P})$.
+    Furthermore, we assume that a random walk of $\Omega$ satisfies the Markov property.
+\end{definition}
+
+\begin{definition}
+    (The Markov property) Let a stochastic process on some countable probability space $(\Omega, \mathcal{F}, \mathbb{P})$
+    with countable state space $S$ be described by $\{X_t : \Omega \to S\}_{t \in T}$,
+    where the index set $T$ is exactly $\{0, 1, 2, 3, \ldots \} = \N$.
+    
+    Then this stochastic process is said to be memoryless, a.k.a. possesses the Markov property, a.k.a. is a Markov process, if and only if for all $t \in T$ and $x_0, x_1, \ldots, x_t \in S$:
+    $$\p{X_t = x_t \mid X_{t-1} = x_{t-1}, \ldots, X_0 = x_0} = \p{X_t = x_t \mid X_{t-1} = x_{t-1}}$$
+    which implies
+    $$\p{X_t = x_t} = \sum_{x_{t-1} \in S} \p{X_t = x_t \mid X_{t-1} = x_{t-1}} \p{X_{t-1} = x_{t-1}}$$
+    For a random walk of some countable set of webpages $\Omega$, this property implies that 
+    the probability that the web surfer lands on a certain webpage after clicking on $t$ links is solely dependent on
+    which webpage the web surfer was on before clicking the $t$-th link.
+\end{definition}
+
+\begin{definition}
+    Let a random walk of some finite set of $n$ webpages $\Omega$ be a Markov process on the probability space $(\Omega, \mathcal{F}, \mathbb{P})$
+    be described by $\{X_t : \Omega \to S\}_{t \in T}$, where $S = \{1, 2, \ldots, n\} = [n]$ and $T = \{0, 1, 2, 3, \ldots\} = \N$.
+    
+    Then, for each $t \in T$, let $\vec{v}_t$ be a $n \times 1$ vector
+    % $\begin{bmatrix} v_1 \\ v_2 \\ \vdots \\ v_n \end{bmatrix}$,
+    where $v_i = \p{X_t = i}$ for $i \in S$.
+    Observe that $\vec{v}_t$ corresponds to the probability distribution of which webpage the web surfer is on after clicking $t$ links.
+    We say that $\vec{v}_t$ is a probablistic vector describing the state at step $t$.
+
+    Furthermore, let $P$ be a $n \times n$ matrix
+    %$\begin{bmatrix}
+    %    p_{11} & \cdots & p_{1n} \\
+    %    \vdots & \ddots & \vdots \\
+    %    p_{n1} & \cdots & p_{nn} \\
+    %\end{bmatrix}$,
+    where $p_{ij} = \p{X_t = i \mid X_{t-1} = j}$ for $i, j \in S$ and any arbitrary $t \in T$. Observe that by Definition 3, $\vec{v}_t = P \vec{v}_{t-1}$ for all $t \in T$.
+    So multiplying by $P$ corresponds to the web surfer clicking a link.
+    Thus we say that $P$ is the Markov transition matrix.
+\end{definition}
+
+\begin{definition}
+    Let $A$ be an adjacency matrix that represents a directed graph consisted of some finite set of $n$ webpages enumerated 1 to $n$,
+    with the $k$-th webpage represented as node $k$, and links between two webpages as edges,
+    such that $A_{ij} = 1$ if and only if there exists an edge from node $j$ to node $i$, i.e. the $j$-th webpage has a link to the $i$-th webpage, and $A_{ij} = 0$ otherwise.
+\end{definition}
+
+\begin{definition}
+    Let $L(j)$ denote the number of outgoing links from the $j$-th webpage.
+    Given a $n \times n$ adjacency matrix $A$ representing a directed graph of $n$ webpages, 
+    we have $L(j) = \sum_{i = 1}^n A_{ij}$.
+    If there exists a node $k$ such that $L(k) = 0$, i.e. the $k$-th webpage has no outgoing links to other webpages, we say that node $k$ is a dangling node.
+\end{definition}
+
+\begin{definition}
+    Let the Markov transition matrix $P$ of a random walk of some finite set of $n$ webpages be constructed as follows:
+    given a $n \times n$ adjacency matrix $A$ representing a directed graph of the $n$ webpages,
+    for each entry $p_{ij}$ in $P$, $i,j \in [n]$,
+    $$ p_{ij} = \begin{cases}
+        \dfrac{1}{L(j)} & \text{ if } A_{ij} = 1 \\
+        \dfrac{1}{n} & \text{ if } A_{ij} = 0 \text{ and } L(j) = 0 \\
+        0 & \text{ otherwise }
+    \end{cases}$$
+    Thus 
+\end{definition}
+
+\begin{definition}
+    A matrix is said to be column-stochastic if and only if each of its entries are between 0 and 1 inclusive, and each of its columns sum up to 1.
+    Similarly, a vector is said to be a stochastic or probablistic vector if and only if its components are between 0 and 1 inclusive and sum up to 1.
+    Note that by definition, the Markov transition matrix $P$ is column-stochastic, and each $\vec{v}_t$ is a probablistic vector.
 \end{definition}
 
 \begin{definition}
     An Markov transition matrix is said to be irreducible if ...
-    A positive stochastic matrix is necessarily irreducible
-\end{definition}
-
-\begin{definition}
-    Let $G$ be a directed graph of the webpages, with each webpage as a node and links between the webpages as edges ... such that $G_{ij} = 1$ if ...
-    also let $n$ denote the number of nodes ...
-    let $L(i)$ denote the number of outgoing edges ...
-\end{definition}
-
-\begin{definition}
-    A dangling node is a node that has no outgoing edges
-\end{definition}
-
-\begin{definition}
-    Let $P$ be the probablistic matrix 
-\end{definition}
-
-\begin{definition}
-    Let $d$ denote the ``damping factor'' ... representing the probability of a web surfer randomly traveling from one page to any other page. $0 \leq d < 1$.
-\end{definition}
-
-\begin{definition}
-    Let $\vec{1}$ 
+    A positive Markov transition matrix with all positive entries is necessarily irreducible
+    Note that the Markov transition matrix $P$ as constructed above is not necessarily irreducible.
 \end{definition}
 
 \begin{definition}
     Let $M$ denote the ``PageRank Matrix'' or ``Google Matrix'' defined by Page and Brin.
     Define 
+
+    where $\vec{1}_{m \times n}$ denotes ...
+    and $d$ denotes the ``damping factor'', representing the probability of a web surfer randomly traveling from one page to any other page. $0 \leq d < 1$.
 \end{definition}
 
 \begin{definition}
