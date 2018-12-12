@@ -36,7 +36,7 @@
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{definition}[theorem]{Definition}
+\newtheorem{definition}{Definition}
 \newtheorem{example}[theorem]{Example}
 \newtheorem{remark}[theorem]{Remark}
 \newtheorem{notation}[theorem]{Notation}
@@ -103,11 +103,12 @@
 
 \begin{document}
 \maketitle
-\begin{abstract}
-Enter a short summary here. What topic do you want to investigate and why? What experiment did you perform? What were your main results and conclusion?
-\end{abstract}
 
 \section{Introduction}
+The early search engines of the Internet used text-based ranking systems that assigned relevance to webpages based on the highest number of keywords present. 
+Although this approach intuitively makes sense, it often ranked webpages with a high volume of keywords and no other content as relevant results to a search, which is not desired behavior.
+A better approach to generating webpage rankings is to examine the links to that page.
+Under this schema, a page is highly ranked if it has many links or a highly-ranked page directed to it, encapsulating both popularity and authority into a ranking.
 
 \section{Definitions}
 \begin{definition}
@@ -219,16 +220,31 @@ Enter a short summary here. What topic do you want to investigate and why? What 
 \end{definition}
 
 \section{Main Ideas}
+We can design a Markov chain for the network of webpages and links, which is represented by $G$.
+Given $G$, we can construct $P$ such that $P_{ij}$ is the probability that a surfer on page $i$ clicks on a link to page $j$. 
+If we assume that each page has an equal probability of being selected, the column vector $P_i$ contains $L(i)$ entries with value $\frac{1}{L(i)}$ when the edge from $i$ to $j$ exists in $G$ and 0's in the other entries.
 
+Let $x$ be the PageRank vector, where the $i^{\textnormal{th}}$ entry of $x$ is the ranking of the webpage.
+We initialize $x$ as a vector with all entries as $\frac{1}{n}$ and then iteratively traverse through $G$, updating the ranks after each traversal.
+Since $P$ is the Markov transition matrix of $G$, the product of $P^m$ and $x$ represents the ranks of each page after $m$ traversals though $G$.
+We note that after infinitely many random walks, the probability that the web surfer is on a given page is proportional to the number of in-bound links to the 
+Therefore, the PageRank vector is the stationary distribution of $G$.
+
+However, we note that there are two special cases that can lead to $x$ not converging properly.
+Consider the case when a random web surfer reaches a webpage by directly typing in its hyperlink. This would be like ``jumping" from a node $i$ in $G$ to any other node $j$ in $G$, regardless of if the edge $(i,j)$ exists in $G$.
+If we assume that each webpage is equally likely to be ``jumped" to by the random web surfer, we obtain a new $n\times n$ probabilstic matrix, which we will denote as $B$, where all of the elements are $\frac{1}{n}$ to represent the probability of jumping from a webpage to another webpage. Since we know $d$ is the probability that the surfer will ``jump",  we can now define the PageRank matrix $M$ to be $(1-d)P + dB$.
+
+In order to prove the existance of the PageRank vector, we first rely on the Perron-Frobenius Theorem.
 \begin{theorem}
-    (The Frobenius Theorem) If 
+    (Perron-Frobenius Theorem) Consider a $n\times n$ positive column-stochastic matrix $M$. Let $\lambda_1, \lambda_2, \cdots, \lambda_n$ be the eigenvalues of $M$ sorted in decreasing order of magnitude. Then 1 is an eigenvalue with multiplicity 1 such that $\lambda_1=1$ and there exists a corresponding probabilistic eigenvector.
 \end{theorem}
 
-\begin{theorem}
-    (Convergence) 
-\end{theorem}
+Since the PageRank matrix $M$ is constructed to be a postitive column-stochastic matrix, by Perron-Frobenius theorem we know that there exists a probabilistic eigenvector $\vec{v}^*$ corresponding to the eigenvalue 1.
 
-This implies that after infinitely many random walks, the web surfer is most likely to be on the webpage corresponding to ...
+The next theorem uses the fact that all of the eigenvectors $\lambda_i$ for $1<i\leq n$ of $M$ are less than $1$ to show that the PageRank vector is equal to $\vec{v}^*$.
+\begin{theorem}
+    (Power Method Convergence Theorem) Let $M$ be a $n\times n$ positive column-stochastic matrix, with $\vec{v}^*$ denosting the probabilstic vector corresponding to 1. Let $z$ be the column vector with all entries equal to $\frac{1}{n}$. Then the sequence $z, Mz, \cdots, M^kz$ as $k\to \infty$ converges to $\vec{v}^*$.    
+\end{theorem}
 
 \begin{lstlisting}[language=python, basicstyle={\small\ttfamily}, numbers=left]
 def build_prob_matrix(adj_list):
