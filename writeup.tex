@@ -220,19 +220,14 @@ Under this schema, a page is highly ranked if it has many links or a highly-rank
 \end{definition}
 
 \section{Main Ideas}
-We can design a Markov chain for the network of webpages and links, which is represented by $G$.
-Given $G$, we can construct $P$ such that $P_{ij}$ is the probability that a surfer on page $i$ clicks on a link to page $j$. 
-If we assume that each page has an equal probability of being selected, the column vector $P_i$ contains $L(i)$ entries with value $\frac{1}{L(i)}$ when the edge from $i$ to $j$ exists in $G$ and 0's in the other entries.
-
-Let $x$ be the PageRank vector, where the $i^{\textnormal{th}}$ entry of $x$ is the ranking of the webpage.
-We initialize $x$ as a vector with all entries as $\frac{1}{n}$ and then iteratively traverse through $G$, updating the ranks after each traversal.
-Since $P$ is the Markov transition matrix of $G$, the product of $P^m$ and $x$ represents the ranks of each page after $m$ traversals though $G$.
-We note that after infinitely many random walks, the probability that the web surfer is on a given page is proportional to the number of in-bound links to the 
-Therefore, the PageRank vector is the stationary distribution of $G$.
+Let $x$ be the PageRank vector, where the $i^{\textnormal{th}}$ entry of $x$ is the ranking of the $i^{\textnormal{th}}$ webpage.
+We initialize $x$ as a vector with all entries equal to $\frac{1}{n}$ and then iteratively perform $t$ random walks through $n$ webpages.
+Since $P$ is the Markov transition matrix, the product of $P^t$ and $x$ represents the ranks of each page after $t$ traversals.
+We note that after infinitely many random walks, the probability that the web surfer is on a given page is proportional to the number of in-bound links to that page.
+Therefore, we want the PageRank vector to be $\lim\limits_{t\to \infty}{A^tx}$, which is the stationary distribution of the Markov process.
 
 However, we note that there are two special cases that can lead to $x$ not converging properly.
 Consider the case when a random web surfer reaches a webpage by directly typing in its hyperlink. This would be like ``jumping" from a node $i$ in $G$ to any other node $j$ in $G$, regardless of if the edge $(i,j)$ exists in $G$.
-If we assume that each webpage is equally likely to be ``jumped" to by the random web surfer, we obtain a new $n\times n$ probabilstic matrix, which we will denote as $B$, where all of the elements are $\frac{1}{n}$ to represent the probability of jumping from a webpage to another webpage. Since we know $d$ is the probability that the surfer will ``jump",  we can now define the PageRank matrix $M$ to be $(1-d)P + dB$.
 
 In order to prove the existance of the PageRank vector, we first rely on the Perron-Frobenius Theorem.
 \begin{theorem}
