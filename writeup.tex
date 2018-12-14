@@ -235,15 +235,17 @@ Since the PageRank matrix $M$ is a postitive column-stochastic matrix by constru
 
 In order to show that the PageRank vector is equal to $\vec{v}^*$, we apply the next theorem that exploits the fact that all of the eigenvectors $\lambda_i$ for $1<i\leq n$ of $M$ are less than $1$.
 \begin{theorem}
-    (Power Method Convergence Theorem) Let $M$ be a $n\times n$ positive column-stochastic matrix, with $\vec{v}^*$ denosting the probabilstic vector corresponding to 1. Let $z$ be the column vector with all entries equal to $\frac{1}{n}$. Then the sequence $z, Mz, \cdots, M^kz$ as $k\to \infty$ converges to $\vec{v}^*$.    
+    (Power Method Convergence Theorem) Let $M$ be a $n\times n$ positive column-stochastic matrix, with $\vec{v}^*$ denosting the probabilstic vector corresponding to 1. Let $x$ be the column vector with all entries equal to $\frac{1}{n}$. Then the sequence $x, Mx, \cdots, M^kx$ as $k\to \infty$ converges to $\vec{v}^*$.    
 \end{theorem}
+
+Thus, the final PageRank vector is equal to the probabilistic eigenvector corresponding to the eigenvalue of 1.
 
 We note that both of these theorems only apply to positive column-stochastic matrices.
 We shall now examine two special cases that illuminate why the matrix must be positive.
-
-Consider a graph that contains a dangling node. This means that the matrix $P$ would contain a column full of 0s, which means that $P^tx$ would converge to $\vec{0}$, regardless of the other links recorded in $P$.
+Consider a graph that contains a dangling node. This means that the matrix $A$, and therefore $P$, would contain a column full of 0s, which means that $P^tx$ would converge to $\vec{0}$, regardless of the other links recorded in $P$.
 If a matrix is reducible, we see that $P^tx$ would also have some webpages that have in-bound links converge to 0.
-In order to prevent this from occuring, we defined $P$ such that a dangling node has equal probability of transitioning to any random webpage, synonymous to how a web surfer can type a hyperlink directly to a webpage.
+In order to prevent the first convergence error from occuring, we define $P$ such that a dangling node has equal probability of transitioning to any random webpage, synonymous to how a web surfer can type a hyperlink directly to a webpage.
+In order to handle reducible matrices, we convert $P$ into a positive matrix by considering the probabilities of the web surfer ``jumping" to a random page for every page. This yields the PageRank matrix $M$, which weighs the probability of following a link and randomly ``jumping" to create a positive column-stochastic matrix.
 
 \begin{lstlisting}[language=python, basicstyle={\small\ttfamily}, numbers=left]
 def build_prob_matrix(adj_list):
@@ -261,6 +263,7 @@ return P
 % \section{Results}
 
 \section{Conclusion}
+
 
 \begin{thebibliography}{9}
 \bibitem{}
