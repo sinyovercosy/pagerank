@@ -15,9 +15,12 @@ def rank(links, d=0.85):
     n = len(links)
     P = build_prob_matrix(links)
     M = d * P + (1 - d) / n * np.ones(P.shape)
-    (evals, evects) = np.linalg.eig(M) # consider using power method and sparse multiplication to approx evects
+    # consider using power method and sparse multiplication to approx evects
+    (evals, evects) = np.linalg.eig(M)
     # index of evect corresponding to 1
     # i = np.where(np.isclose(evals, 1.0))
-    i = next(i for i, e in enumerate(evals) if np.isclose(e, 1.0)) # faster, from https://stackoverflow.com/questions/41022765
-    v = evects[:, i] / sum(evects[:, i])
-    return [i for i, e in sorted(enumerate(v), key=lambda x: x[1], reverse=True)] # consider using itemgetter from operators
+    # below is faster, from https://stackoverflow.com/questions/41022765
+    i = next(i for i, e in enumerate(evals) if np.isclose(e, 1.0)) 
+    v = abs(evects[:, i]) / sum(abs(evects[:, i]))
+    # consider using itemgetter from operators
+    return [i for i, e in sorted(enumerate(v), key=lambda x: x[1], reverse=True)]
