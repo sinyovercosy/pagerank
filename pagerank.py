@@ -21,6 +21,6 @@ def rank(links, d=0.85):
     # i = np.where(np.isclose(evals, 1.0))
     # below is faster, from https://stackoverflow.com/questions/41022765
     i = next(i for i, e in enumerate(evals) if np.isclose(e, 1.0)) 
-    v = evects[:, i] / sum(evects[:, i])
+    v = abs(evects[:, i]) / sum(abs(evects[:, i]))
     # consider using itemgetter from operators
     return [i for i, e in sorted(enumerate(v), key=lambda x: x[1], reverse=True)]

@@ -4,7 +4,7 @@
 
 \documentclass[11pt]{article}
 
-\title{PageRank}
+\title{The PageRank Algorithm}
 \author{Tan Yan \and Daniel Bae}
 
 % Useful Packages
@@ -180,7 +180,7 @@ Under this schema, a page is highly ranked if it has many links or a highly-rank
 
 \begin{definition}
     An Markov chain is said to be irreducible if it is possible to get from any state from any state.
-    For a random walk of of webpages, this property implies that it is possible to get to any webpage from any any webpage by click some series of links.
+    For a random walk of of webpages, this property implies that it is possible to get to any webpage from any any webpage by clicking some series of links.
     Note that a Markov transition matrix with all positive entries necessarily corresponds to an irreducible Markov chain.
 \end{definition}
 
@@ -220,7 +220,7 @@ In order to find the PageRank vector, we cite without proof the following theore
 
 % In order to show that the PageRank vector is equal to $\vec{v}^*$, we apply the next theorem that exploits the fact that all of the eigenvectors $\lambda_i$ for $1<i\leq n$ of $M$ are less than $1$.
 \begin{theorem}
-    Let $M$ be a $n\times n$ positive column-stochastic matrix, with $\vec{v}^*$ denoting the probabilstic vector corresponding to the eigenvalue 1.
+    Let $M$ be a $n\times n$ positive column-stochastic matrix, with $\vec{v}^*$ denoting the probabilstic eigenvector corresponding to the eigenvalue 1.
     Then for any initial state with probabilistic vector $\vec{v}_0$, the limit $\lim\limits_{t\to \infty}{M^t \vec{v}_0}$ converges to $\vec{v}^*$.    
 \end{theorem}
 \begin{proof}
@@ -235,7 +235,7 @@ In order to find the PageRank vector, we cite without proof the following theore
     and for all $1 < i \leq k$, since $\abs{\lambda_i} < 1$, $\lim\limits_{t\to \infty}{\lambda_i^t} = 0$.
     Thus, taking the limit yields $\lim\limits_{t\to \infty}{M^t \vec{v}_0} = \alpha_1 \vec{w}_1$, which is an eigenvector corresponding to the eigenvalue 1.
     But recall that $M^t \vec{v}_0 = \vec{v}_t$ must be a probabilistic vector,
-    and since $\vec{v}^*$ is the unique probabilstic vector corresponding to the eigenvalue 1, $\lim\limits_{t\to \infty}{M^t \vec{v}_0} = \vec{v}^*$. as desired.
+    and since $\vec{v}^*$ is the unique probabilstic eigenvector corresponding to the eigenvalue 1, $\lim\limits_{t\to \infty}{M^t \vec{v}_0} = \vec{v}^*$, as desired.
 \end{proof}
 
 Thus, for some random walk corresponding to the Markov transition matrix $M$, 
@@ -339,6 +339,18 @@ As per Page and Brin, \texttt{d} is defined to have a default value of $0.85$.
 
 \begin{thebibliography}{9}
 \bibitem{}
+How Google works: Markov chains and eigenvalues. (2015, May 30). The Klein Project. http://blog.kleinproject.org/?author=1. Accessed 14 December 2018.
+
+\bibitem{}
+Shum, K. (2013, March 4). Notes on PageRank Algorithm. Chinese University of Hong Kong. http://home.ie.cuhk.edu.hk/~wkshum/papers/pagerank.pdf. Accessed 14 December 2018.
+
+\bibitem{}
+Tanase, R., \& Radu, R. (2009). Lecture \#3: PageRank Algorithm - The Mathematics of Google Search.
+\textit{The Mathematics of Web Search.} Cornell University. 
+http://pi.math.cornell.edu/~mec/Winter2009/RalucaRemus/Lecture3/lecture3.html. Accessed 14 December 2018.
+
+\bibitem{}
+Wikipedia contributors. (2018). Stochastic process. Wikipedia, The Free Encyclopedia. https://en.wikipedia.org/wiki/Stochastic\_process. Accessed 14 December 2018.
 
 \end{thebibliography}
 \end{document}
