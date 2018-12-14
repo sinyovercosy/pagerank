@@ -239,7 +239,7 @@ In order to find the PageRank vector, we cite without proof the following theore
 \end{proof}
 
 Thus, for some random walk corresponding to the Markov transition matrix $M$, 
-the PageRank vector is equal to the probabilistic eigenvector of $M$ corresponding to the eigenvalue of 1, but this requires $M$ to be a positive column-stochastic matrix!
+the PageRank vector is equal to the probabilistic eigenvector of $M$ corresponding to the eigenvalue of 1, but this requires $M$ to be a positive column-stochastic matrix.
 We shall now examine two special cases that illuminate why $M$ must be positive and column-stochastic.
 
 \begin{definition}
@@ -310,12 +310,17 @@ In order to handle reducible matrices, we convert $P$ into a positive matrix by 
 
 \section{Conclusion}
 % what we wanted to accomplish
+The PageRank algorithm is a method for computing the relevancy of webpages based on the number of in-bound links to each webpage. In this way, the rank of a webpage is determined based on its popularity and authority of the pages linked to it.
 % how we did it
+We first create a directed graph of the webpages and the links between them, storing the graph as an adjacency matrix $A$. We then create the Markov transition matrix $P$ for random walks on the graph using the information in $A$, and create the positive column-stochastic matrix $M$ using $P$ and the probability of a web surfer ``jumpiing" to another page.
+We initialize all of the webpage ranks in the matrix $v_0$ as $\frac{1}{n}$, and then iteratively reassign ranks based on the Markov chain represented by $P$ until $M^tv_0$ converges to a stable probabilistic vector, which is the desired vector of rankings.
 % future possible improvements:
 %  > approximating limit prob e-vect with power method (why efficient?)
 %  > using sparse multiplication (why is M sparse?)
-
-
+Although the average number of iterations to find the PageRank vector is usually not very large, there are still a large number of computations involved in repeatedly multiplying matrices together.
+If the columns of $M$ are all linearly independent, we can create a diagonalization for $M$ and then approximate the probabilistic eigenvector corresponding to 1 using the power method. This would be more efficient since repeatedly muliplying a diagonalized matrix is equivalent to taking powers of the diagonal matrix of eigenvalues, which is a relatively cheaper computation.
+Realistically, we can expect $A$ to be sparse since webpages and their links would not create a complete directed graph. If we redefine how to construct $P$ and $M$ such that we still handle dangling nodes and reducible web graphs, we can then utilize sparse multiplication to decrease computation costs. However, we would then lose the ability to invoke Perron-Frobenius theorem since $M$ being sparse necessarily forces $M$ to be non-negative, not positive.
+We also note that this formulation of PageRank does not account for any of the content in the webpages, only their popularity and authority. Augmenting the model with a feature that allows for determining relevancy based on keywords like text-based ranking systems could further improve determining the relevancy of webpages.
 
 \begin{thebibliography}{9}
 \bibitem{}
