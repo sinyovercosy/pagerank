@@ -175,7 +175,7 @@ Under this schema, a page is highly ranked if it has many links or a highly-rank
 \begin{definition}
     A matrix is said to be column-stochastic if and only if each of its entries are between 0 and 1 inclusive, and each of its columns sum up to 1.
     Similarly, a vector is said to be a stochastic or probablistic vector if and only if its components are between 0 and 1 inclusive and sum up to 1.
-    Note that by definition, the Markov transition matrix $P$ is column-stochastic, and each $\vec{v}_t$ is a probablistic vector.
+    Note that the matrix-vector product between a column-stochastic matrix a probabilistic vector always yields a probabilistic vector.
 \end{definition}
 
 \begin{definition}
@@ -221,7 +221,7 @@ In order to find the PageRank vector, we cite without proof the following theore
 % In order to show that the PageRank vector is equal to $\vec{v}^*$, we apply the next theorem that exploits the fact that all of the eigenvectors $\lambda_i$ for $1<i\leq n$ of $M$ are less than $1$.
 \begin{theorem}
     Let $M$ be a $n\times n$ positive column-stochastic matrix, with $\vec{v}^*$ denoting the probabilstic vector corresponding to the eigenvalue 1.
-    Then for any initial state with probabilistic vector $\vec{v}_0$, the limit $\lim\limits_{t\to \infty}{M^t \vec{v}_0}$ converges to some scalar multiple of $\vec{v}^*$.    
+    Then for any initial state with probabilistic vector $\vec{v}_0$, the limit $\lim\limits_{t\to \infty}{M^t \vec{v}_0}$ converges to $\vec{v}^*$.    
 \end{theorem}
 \begin{proof}
     Let $\lambda_1, \lambda_2, \ldots, \lambda_k$ be the eigenvalues of $M$, where $k \leq n$, and $\vec{w}_1, \vec{w}_2, \ldots, \vec{w}_k$ be their corresponding eigenvectors, 
@@ -231,31 +231,16 @@ In order to find the PageRank vector, we cite without proof the following theore
     for some scalars $\alpha_1, \alpha_2, \ldots, \alpha_k$. Multiplying by $M^t$ on both sides yields
     $$M^t \vec{v}_0 = \alpha_1 M^t \vec{w}_1 + \alpha_2 M^t \vec{w}_2 + \cdots + \alpha_k M^t \vec{w}_k$$
     $$M^t \vec{v}_0 = \alpha_1 \lambda_1^t \vec{w}_1 + \alpha_2 \lambda_2^t \vec{w}_2 + \cdots + \alpha_k \lambda_k^t \vec{w}_k$$
-    By the Perron-Frobenius Theorem, we can let $\lambda_1 = 1$ and $\vec{w}_1 = c \vec{v}^*$ for some scalar $c$,
+    By the Perron-Frobenius Theorem, we can let $\lambda_1 = 1$,
     and for all $1 < i \leq k$, since $\abs{\lambda_i} < 1$, $\lim\limits_{t\to \infty}{\lambda_i^t} = 0$.
-    Thus, taking the limit yields $\lim\limits_{t\to \infty}{M^t \vec{v}_0} = \alpha_1 c \vec{v}^*$, which is a scalar multiple of $\vec{v}^*$, as desired.
+    Thus, taking the limit yields $\lim\limits_{t\to \infty}{M^t \vec{v}_0} = \alpha_1 \vec{w}_1$, which is an eigenvector corresponding to the eigenvalue 1.
+    But recall that $M^t \vec{v}_0 = \vec{v}_t$ must be a probabilistic vector,
+    and since $\vec{v}^*$ is the unique probabilstic vector corresponding to the eigenvalue 1, $\lim\limits_{t\to \infty}{M^t \vec{v}_0} = \vec{v}^*$. as desired.
 \end{proof}
 
-Thus, the final PageRank vector is equal to the probabilistic eigenvector corresponding to the eigenvalue of 1.
-
-We note that both of these theorems only apply to positive column-stochastic matrices.
-We shall now examine two special cases that illuminate why the matrix must be positive.
-Consider a graph that contains a dangling node. This means that the matrix $A$, and therefore $P$, would contain a column full of 0s, which means that $P^tx$ would converge to $\vec{0}$, regardless of the other links recorded in $P$.
-
-% but we need positive column-stochastic matrix
-
-We note that both of these theorems only apply to positive column-stochastic matrices.
-We shall now examine two special cases that illuminate why the matrix must be positive.
-
-% why we can't have dangling node: not column-stochastic!
-
-Consider a graph that contains a dangling node. This means that the matrix $P$ would contain a column full of 0s, which means that $P^tx$ would converge to $\vec{0}$, regardless of the other links recorded in $P$.
-
-If a matrix is reducible, we see that $P^tx$ would also have some webpages that have in-bound links converge to 0.
-In order to prevent the first convergence error from occuring, we define $P$ such that a dangling node has equal probability of transitioning to any random webpage, synonymous to how a web surfer can type a hyperlink directly to a webpage.
-In order to handle reducible matrices, we convert $P$ into a positive matrix by considering the probabilities of the web surfer ``jumping" to a random page for every page. This yields the PageRank matrix $M$, which weighs the probability of following a link and randomly ``jumping" to create a positive column-stochastic matrix.
-
-% how we fix this
+Thus, for some random walk corresponding to the Markov transition matrix $M$, 
+the PageRank vector is equal to the probabilistic eigenvector of $M$ corresponding to the eigenvalue of 1, but this requires $M$ to be a positive column-stochastic matrix!
+We shall now examine two special cases that illuminate why $M$ must be positive and column-stochastic.
 
 \begin{definition}
     Let $A$ be an adjacency matrix that represents a directed graph consisted of some finite set of $n$ webpages enumerated 1 to $n$,
@@ -270,6 +255,21 @@ In order to handle reducible matrices, we convert $P$ into a positive matrix by 
     If there exists a node $k$ such that $L(k) = 0$, i.e. the $k$-th webpage has no outgoing links to other webpages, we say that node $k$ is a dangling node.
 \end{definition}
 
+% why we can't have dangling node: not column-stochastic!
+
+Consider a graph of webpages that contains a dangling node.
+This means that the matrix $A$ would contain a column full of zeros at the dangling node.
+If we naively define a Markov transition matrix $P$ such that the web surfer can only follow the links from one webpage to another,
+then when the web surfer reaches a dangling node, i.e. a webpage with no outgoing links, the web surfer will have zero probability of reaching any other webpage,
+thus resulting in a column full of zeros in $P$.
+As such, $P$ will not be column-stochastic, or even a well-defined Markov transition matrix, and in fact,
+$P^t \vec{v}_0$ would converge to $\vec{0}$, regardless of the other links recorded in $P$.
+
+
+% how we fix this
+
+In order to prevent this first type of pathology from occuring, we define $P$ such that a dangling node has equal probability of transitioning to any random node, analogous to how a web surfer can type a hyperlink directly to a webpage.
+
 \begin{definition}
     Let the Markov transition matrix $P$ of a random walk of some finite set of $n$ webpages be constructed as follows:
     given a $n \times n$ adjacency matrix $A$ representing a directed graph of the $n$ webpages,
@@ -281,13 +281,19 @@ In order to handle reducible matrices, we convert $P$ into a positive matrix by 
     \end{cases}$$
 \end{definition}
 
-\lstinputlisting[language=Python, numbers=left, firstline=3, lastline=12]{pagerank.py}
+Note that now, $P$ is column-stochastic by construction. Below is the Python code used to construct $P$ from an adjacency list representation of the graph of webpages.
+
+\lstinputlisting[language=Python, firstline=3, lastline=12]{pagerank.py}
 
 % observe that now P is column stochastic by construction
 % but P not necessarily positive!
 % so the Markov chain that correpsonds to P may not be irreducible
 % why this is bad
 % how we fix this 
+
+If a matrix is reducible, we see that $P^tx$ would also have some webpages that have in-bound links converge to 0.
+
+In order to handle reducible matrices, we convert $P$ into a positive matrix by considering the probabilities of the web surfer ``jumping" to a random page for every page. This yields the PageRank matrix $M$, which weighs the probability of following a link and randomly ``jumping" to create a positive column-stochastic matrix.
 
 \begin{definition}
     Let $M$ denote the ``PageRank Matrix'' or ``Google Matrix'' devised by Page and Brin:
