@@ -36,7 +36,7 @@
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{definition}{Definition}
+\newtheorem{definition}[theorem]{Definition}
 \newtheorem{example}[theorem]{Example}
 \newtheorem{remark}[theorem]{Remark}
 \newtheorem{notation}[theorem]{Notation}
@@ -124,22 +124,25 @@ Under this schema, a page is highly ranked if it has many links or a highly-rank
     Let a random walk of some countable set of webpages $\Omega$ be a stochastic process on $(\Omega, \mathcal{F}, \mathbb{P})$ defined as follows:
 
     Let $\Omega$ be enumerated by the set $S = \{0, 1, 2, 3, \ldots\} \subseteq \N$, such that $\Omega = \{\omega_i \mid i \in S\}$.
+    We call $S$ the state space of the stochastic process, and note that $S$ is countable.
 
     Let the index set $T = \{0, 1, 2, 3, \ldots \} = \N$ denote the number of links that the web surfer has clicked on, i.e. the number of times that the web surfer has jumped from one webpage to another.
+    As $T$ represents the measure of time in the process and $T$ is countable, we say that the stochastic process occurs in discrete time.
     
     Let $\{X_t : \Omega \to S\}_{t \in T}$ be a family of $S$-valued random variables indexed by $T$ such that
     $\p{X_t = i}$ corresponds to the probability of the event that the web surfer lands on the $i$-th webpage after clicking on $t$ links or making $t$ jumps from one webpage to another.
 
-    Then $\{X_t : \Omega \to S\}_{t \in T}$ precisely describes a stochastic process on $(\Omega, \mathcal{F}, \mathbb{P})$.
+    Then $\{X_t : \Omega \to S\}_{t \in T}$ precisely describes a discrete-time stochastic process over a countable state space on $(\Omega, \mathcal{F}, \mathbb{P})$.
     Furthermore, we assume that a random walk of $\Omega$ satisfies the Markov property.
 \end{definition}
 
 \begin{definition}
     (The Markov property) Let a stochastic process on some countable probability space $(\Omega, \mathcal{F}, \mathbb{P})$
     with countable state space $S$ be described by $\{X_t : \Omega \to S\}_{t \in T}$,
-    where the index set $T$ is exactly $\{0, 1, 2, 3, \ldots \} = \N$.
-    
-    Then this stochastic process is said to be memoryless, a.k.a. possesses the Markov property, a.k.a. is a Markov process, if and only if for all $t \in T$ and $x_0, x_1, \ldots, x_t \in S$:
+    where the index set $T$ is exactly $\{0, 1, 2, 3, \ldots \} = \N$,
+    i.e. it occurs in discrete time.
+
+    Then this stochastic process is said to be memoryless, a.k.a. possesses the Markov property, a.k.a. is a discrete-time Markov chain, if and only if for all $t \in T$ and $x_0, x_1, \ldots, x_t \in S$:
     $$\p{X_t = x_t \mid X_{t-1} = x_{t-1}, \ldots, X_0 = x_0} = \p{X_t = x_t \mid X_{t-1} = x_{t-1}}$$
     which implies
     $$\p{X_t = x_t} = \sum_{x_{t-1} \in S} \p{X_t = x_t \mid X_{t-1} = x_{t-1}} \p{X_{t-1} = x_{t-1}}$$
@@ -149,7 +152,7 @@ Under this schema, a page is highly ranked if it has many links or a highly-rank
 \end{definition}
 
 \begin{definition}
-    Let a random walk of some finite set of $n$ webpages $\Omega$ be a Markov process on the probability space $(\Omega, \mathcal{F}, \mathbb{P})$
+    Let a random walk of some finite set of $n$ webpages $\Omega$ be a discrete-time Markov chain on the probability space $(\Omega, \mathcal{F}, \mathbb{P})$
     be described by $\{X_t : \Omega \to S\}_{t \in T}$, where $S = \{1, 2, \ldots, n\} = [n]$ and $T = \{0, 1, 2, 3, \ldots\} = \N$.
     
     Then, for each $t \in T$, let $\vec{v}_t$ be a $n \times 1$ vector
@@ -166,8 +169,59 @@ Under this schema, a page is highly ranked if it has many links or a highly-rank
     %\end{bmatrix}$,
     where $p_{ij} = \p{X_t = i \mid X_{t-1} = j}$ for $i, j \in S$ and any arbitrary $t \in T$. Observe that by Definition 3, $\vec{v}_t = P \vec{v}_{t-1}$ for all $t \in T$.
     So multiplying by $P$ corresponds to the web surfer clicking a link.
-    Thus we say that $P$ is the Markov transition matrix.
+    Thus we say that $P$ is the unique Markov transition matrix that corresponds to the given discrete-time Markov chain.
 \end{definition}
+
+\begin{definition}
+    A matrix is said to be column-stochastic if and only if each of its entries are between 0 and 1 inclusive, and each of its columns sum up to 1.
+    Similarly, a vector is said to be a stochastic or probablistic vector if and only if its components are between 0 and 1 inclusive and sum up to 1.
+    Note that by definition, the Markov transition matrix $P$ is column-stochastic, and each $\vec{v}_t$ is a probablistic vector.
+\end{definition}
+
+\begin{definition}
+    An Markov chain is said to be irreducible if it is possible to get from any state from any state.
+    For a random walk of of webpages, this property implies that it is possible to get to any webpage from any any webpage by click some series of links.
+    Note that a Markov transition matrix with all positive entries necessarily corresponds to an irreducible Markov chain.
+\end{definition}
+
+\section{Main Ideas}
+
+% initialize initial state v_0 to ... because ...
+% observe that for some random walk defined by some Markov transition matrix P, the state at the n-th step is P^n v_0
+% so after inf num of steps, prob web surf on page is limit ... which represent relevance of webpages
+
+Let $x$ be the PageRank vector, where the $i^{\textnormal{th}}$ entry of $x$ is the ranking of the $i^{\textnormal{th}}$ webpage.
+We initialize $x$ as a vector with all entries equal to $\frac{1}{n}$ and then iteratively perform $t$ random walks through $n$ webpages.
+Since $P$ is the Markov transition matrix, the product of $P^t$ and $x$ represents the ranks of each page after $t$ traversals.
+We note that after infinitely many random walks, the probability that the web surfer is on a given page is proportional to the number of in-bound links to that page.
+Therefore, we want the PageRank vector to be $\lim\limits_{t\to \infty}{A^tx}$, which is the stationary distribution of the Markov process.
+
+% to find this limit we can cite the following theorems without proof
+
+In order to prove the existance of the PageRank vector, we first rely on the Perron-Frobenius Theorem.
+\begin{theorem}
+    (Perron-Frobenius Theorem) Consider a $n\times n$ positive column-stochastic matrix $M$. Let $\lambda_1, \lambda_2, \cdots, \lambda_n$ be the eigenvalues of $M$ sorted in decreasing order of magnitude. Then 1 is an eigenvalue with multiplicity 1 such that $\lambda_1=1$ and there exists a corresponding probabilistic eigenvector.
+\end{theorem}
+
+Since the PageRank matrix $M$ is a postitive column-stochastic matrix by construction, by Perron-Frobenius theorem we know that there exists a probabilistic eigenvector $\vec{v}^*$ corresponding to the eigenvalue 1.
+
+In order to show that the PageRank vector is equal to $\vec{v}^*$, we apply the next theorem that exploits the fact that all of the eigenvectors $\lambda_i$ for $1<i\leq n$ of $M$ are less than $1$.
+\begin{theorem}
+    (Power Method Convergence Theorem) Let $M$ be a $n\times n$ positive column-stochastic matrix, with $\vec{v}^*$ denosting the probabilstic vector corresponding to 1. Let $z$ be the column vector with all entries equal to $\frac{1}{n}$. Then the sequence $z, Mz, \cdots, M^kz$ as $k\to \infty$ converges to $\vec{v}^*$.    
+\end{theorem}
+
+% but we need positive column-stochastic matrix
+
+We note that both of these theorems only apply to positive column-stochastic matrices.
+We shall now examine two special cases that illuminate why the matrix must be positive.
+
+% why we can't have dangling node: not column-stochastic!
+
+Consider a graph that contains a dangling node. This means that the matrix $P$ would contain a column full of 0s, which means that $P^tx$ would converge to $\vec{0}$, regardless of the other links recorded in $P$.
+If a matrix is reducible, we see that $P^tx$ would also have some webpages that have in-bound links converge to 0.
+In order to prevent this from occuring, we defined $P$ such that a dangling node has equal probability of transitioning to any random webpage, synonymous to how a web surfer can type a hyperlink directly to a webpage.
+
+% how we fix this
 
 \begin{definition}
     Let $A$ be an adjacency matrix that represents a directed graph consisted of some finite set of $n$ webpages enumerated 1 to $n$,
@@ -191,65 +245,36 @@ Under this schema, a page is highly ranked if it has many links or a highly-rank
         \dfrac{1}{n} & \text{ if } A_{ij} = 0 \text{ and } L(j) = 0 \\
         0 & \text{ otherwise }
     \end{cases}$$
-    Thus 
 \end{definition}
-
-\begin{definition}
-    A matrix is said to be column-stochastic if and only if each of its entries are between 0 and 1 inclusive, and each of its columns sum up to 1.
-    Similarly, a vector is said to be a stochastic or probablistic vector if and only if its components are between 0 and 1 inclusive and sum up to 1.
-    Note that by definition, the Markov transition matrix $P$ is column-stochastic, and each $\vec{v}_t$ is a probablistic vector.
-\end{definition}
-
-\begin{definition}
-    An Markov transition matrix is said to be irreducible if ...
-    A positive Markov transition matrix with all positive entries is necessarily irreducible
-    Note that the Markov transition matrix $P$ as constructed above is not necessarily irreducible.
-\end{definition}
-
-\begin{definition}
-    Let $M$ denote the ``PageRank Matrix'' or ``Google Matrix'' defined by Page and Brin.
-    Define 
-
-    where $\vec{1}_{m \times n}$ denotes ...
-    and $d$ denotes the ``damping factor'', representing the probability of a web surfer randomly traveling from one page to any other page. $0 \leq d < 1$.
-\end{definition}
-
-\begin{definition}
-    Let $\lambda$ denote an eigenvalue of the square matrix $A$ and let $\vec{v}$ denote its corresponding eigenvector, such that $A \vec{v} = \lambda \vec{v}$.
-    A probablistic eigenvector is...
-\end{definition}
-
-\section{Main Ideas}
-Let $x$ be the PageRank vector, where the $i^{\textnormal{th}}$ entry of $x$ is the ranking of the $i^{\textnormal{th}}$ webpage.
-We initialize $x$ as a vector with all entries equal to $\frac{1}{n}$ and then iteratively perform $t$ random walks through $n$ webpages.
-Since $P$ is the Markov transition matrix, the product of $P^t$ and $x$ represents the ranks of each page after $t$ traversals.
-We note that after infinitely many random walks, the probability that the web surfer is on a given page is proportional to the number of in-bound links to that page.
-Therefore, we want the PageRank vector to be $\lim\limits_{t\to \infty}{A^tx}$, which is the stationary distribution of the Markov process.
-
-In order to prove the existance of the PageRank vector, we first rely on the Perron-Frobenius Theorem.
-\begin{theorem}
-    (Perron-Frobenius Theorem) Consider a $n\times n$ positive column-stochastic matrix $M$. Let $\lambda_1, \lambda_2, \cdots, \lambda_n$ be the eigenvalues of $M$ sorted in decreasing order of magnitude. Then 1 is an eigenvalue with multiplicity 1 such that $\lambda_1=1$ and there exists a corresponding probabilistic eigenvector.
-\end{theorem}
-
-Since the PageRank matrix $M$ is a postitive column-stochastic matrix by construction, by Perron-Frobenius theorem we know that there exists a probabilistic eigenvector $\vec{v}^*$ corresponding to the eigenvalue 1.
-
-In order to show that the PageRank vector is equal to $\vec{v}^*$, we apply the next theorem that exploits the fact that all of the eigenvectors $\lambda_i$ for $1<i\leq n$ of $M$ are less than $1$.
-\begin{theorem}
-    (Power Method Convergence Theorem) Let $M$ be a $n\times n$ positive column-stochastic matrix, with $\vec{v}^*$ denosting the probabilstic vector corresponding to 1. Let $z$ be the column vector with all entries equal to $\frac{1}{n}$. Then the sequence $z, Mz, \cdots, M^kz$ as $k\to \infty$ converges to $\vec{v}^*$.    
-\end{theorem}
-
-We note that both of these theorems only apply to positive column-stochastic matrices.
-We shall now examine two special cases that illuminate why the matrix must be positive.
-
-Consider a graph that contains a dangling node. This means that the matrix $P$ would contain a column full of 0s, which means that $P^tx$ would converge to $\vec{0}$, regardless of the other links recorded in $P$.
-If a matrix is reducible, we see that $P^tx$ would also have some webpages that have in-bound links converge to 0.
-In order to prevent this from occuring, we defined $P$ such that a dangling node has equal probability of transitioning to any random webpage, synonymous to how a web surfer can type a hyperlink directly to a webpage.
 
 \lstinputlisting[language=Python, numbers=left, firstline=3, lastline=12]{pagerank.py}
+
+% observe that now P is column stochastic by construction
+% but P not necessarily positive!
+% so the Markov chain that correpsonds to P may not be irreducible
+% why this is bad
+% how we fix this 
+
+\begin{definition}
+    Let $M$ denote the ``PageRank Matrix'' or ``Google Matrix'' devised by Page and Brin:
+    $$M = (1-d)P + \frac{d}{n} \vec{1}_{n \times n}$$
+    where $P$ is the Markov transition matrix of a random walk of some finite set of $n$ webpages as defined above,
+    $\vec{1}_{n \times n}$ denotes the $n \times n$ matrix consisting of entries all equal to 1,
+    and $d$ denotes the ``damping factor'', representing the probability of a web surfer randomly traveling from one page to any other page,
+    such that $0 \leq d < 1$.
+\end{definition}
+
+% now we good!
 
 % \section{Results}
 
 \section{Conclusion}
+% what we wanted to accomplish
+% how we did it
+% future possible improvements:
+%  > approximating limit prob e-vect with power method (why efficient?)
+%  > using sparse multiplication (why is M sparse?)
+
 
 \begin{thebibliography}{9}
 \bibitem{}
