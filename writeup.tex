@@ -268,12 +268,14 @@ $P^t \vec{v}_0$ would converge to $\vec{0}$, regardless of the other links recor
 
 % how we fix this
 
-In order to prevent this first type of pathology from occuring, we define $P$ such that a dangling node has equal probability of transitioning to any random node, analogous to how a web surfer can type a hyperlink directly to a webpage.
+In order to prevent this first type of pathology from occuring, we define the Markov transition matrix $P$ for a random walk of $n$ webpages such that
+a web surfer has equal probability to follow any of the links present on a webpage,
+but upon reaching a dangling node, the web surfer has equal probability of transitioning to any random node, analogous to how a web surfer can type a hyperlink directly to a webpage.
 
 \begin{definition}
     Let the Markov transition matrix $P$ of a random walk of some finite set of $n$ webpages be constructed as follows:
     given a $n \times n$ adjacency matrix $A$ representing a directed graph of the $n$ webpages,
-    for each entry $p_{ij}$ in $P$, $i,j \in [n]$,
+    for each entry $p_{ij}$ in $P$, with $i,j \in [n]$,
     $$ P_{ij} = \begin{cases}
         \dfrac{1}{L(j)} & \text{ if } A_{ij} = 1 \\
         \dfrac{1}{n} & \text{ if } A_{ij} = 0 \text{ and } L(j) = 0 \\
@@ -281,7 +283,7 @@ In order to prevent this first type of pathology from occuring, we define $P$ su
     \end{cases}$$
 \end{definition}
 
-Note that now, $P$ is column-stochastic by construction. Below is the Python code used to construct $P$ from an adjacency list representation of the graph of webpages.
+Below is the Python code used to construct $P$ from an adjacency list representation of the graph of webpages.
 
 \lstinputlisting[language=Python, firstline=3, lastline=12]{pagerank.py}
 
@@ -291,9 +293,19 @@ Note that now, $P$ is column-stochastic by construction. Below is the Python cod
 % why this is bad
 % how we fix this 
 
-If a matrix is reducible, we see that $P^tx$ would also have some webpages that have in-bound links converge to 0.
+Note that now, $P$ is column-stochastic by construction. However, $P$ is not necessarily a matrix with all positive entires.
+i.e. $P$ correpsonds to a Markov chain that is not necessarily irreducible.
 
-In order to handle reducible matrices, we convert $P$ into a positive matrix by considering the probabilities of the web surfer ``jumping" to a random page for every page. This yields the PageRank matrix $M$, which weighs the probability of following a link and randomly ``jumping" to create a positive column-stochastic matrix.
+A random walk of webpages that is a reducible Markov chain runs into the issue that a web surfer can potentially become trapped in a cycle of webpages,
+where there is no links to any webpages outside the cycle.
+In this case, after some arbitrarily large number of steps in the random walk,
+the web surfer will have zero probability of reaching any webpages outside of the cycle.
+Then the PageRank vector will output zero relevance for any webpages outside of the cycle, even if they have inbound links, which is incorrect. 
+
+In order to handle this pathology, we again consider how a web surfer can type a hyperlink directly to a webpage.
+By defining some nonzero probability of the web surfer ``jumping'' to a random webpage, even if there are no links to that webpage on the current page,
+we allow the web surfer to get from any webpage to any webpage, thus ensuring that the random walk is a irreducible Markov chain.
+This yields the PageRank matrix $M$, which uses weighted sum of the web surfer following a link and randomly ``jumping'' to create a positive column-stochastic Markov transition matrix.
 
 \begin{definition}
     Let $M$ denote the ``PageRank Matrix'' or ``Google Matrix'' devised by Page and Brin:
@@ -301,10 +313,18 @@ In order to handle reducible matrices, we convert $P$ into a positive matrix by 
     where $P$ is the Markov transition matrix of a random walk of some finite set of $n$ webpages as defined above,
     $\vec{1}_{n \times n}$ denotes the $n \times n$ matrix consisting of entries all equal to 1,
     and $d$ denotes the ``damping factor'', representing the probability of a web surfer randomly traveling from one page to any other page,
-    such that $0 \leq d < 1$.
+    such that $0 < d < 1$.
 \end{definition}
 
 % now we good!
+Since $M$ is positive and column-stochastic by construction, we are able to use the theorems above to find the PageRank vector.
+
+Below is the Python code to create the PageRank matrix, find the PageRank vector, and sort the PageRank vector to rank the webpages by relevance.
+Note that the variable \texttt{d} used in the below code snippet is equal to $1-d$, where $d$ is the damping factor as defined above.
+This simply means that \texttt{d} represents the probability of the web surfer following the links on a webpage instead of randomly jumping.
+As per Page and Brin, \texttt{d} is defined to have a default value of $0.85$.
+
+\lstinputlisting[language=Python, firstline=13]{pagerank.py}
 
 % \section{Results}
 
