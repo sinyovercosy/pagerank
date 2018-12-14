@@ -362,3 +362,6 @@ TSWLatexianTemp*
 
 # standalone packages
 *.sta
+
+# pdfs
+*.pdf
