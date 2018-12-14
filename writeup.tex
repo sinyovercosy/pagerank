@@ -238,9 +238,6 @@ In order to show that the PageRank vector is equal to $\vec{v}^*$, we apply the 
     (Power Method Convergence Theorem) Let $M$ be a $n\times n$ positive column-stochastic matrix, with $\vec{v}^*$ denosting the probabilstic vector corresponding to 1. Let $z$ be the column vector with all entries equal to $\frac{1}{n}$. Then the sequence $z, Mz, \cdots, M^kz$ as $k\to \infty$ converges to $\vec{v}^*$.    
 \end{theorem}
 
-<<<<<<< HEAD
-\lstinputlisting[language=Python, numbers=left, firstline=3, lastline=12]{pagerank.py}
-=======
 We note that both of these theorems only apply to positive column-stochastic matrices.
 We shall now examine two special cases that illuminate why the matrix must be positive.
 
@@ -248,20 +245,8 @@ Consider a graph that contains a dangling node. This means that the matrix $P$ w
 If a matrix is reducible, we see that $P^tx$ would also have some webpages that have in-bound links converge to 0.
 In order to prevent this from occuring, we defined $P$ such that a dangling node has equal probability of transitioning to any random webpage, synonymous to how a web surfer can type a hyperlink directly to a webpage.
 
-\begin{lstlisting}[language=python, basicstyle={\small\ttfamily}, numbers=left]
-def build_prob_matrix(adj_list):
-# number of nodes
-n = len(adj_list)
-P = np.zeros((n,n), dtype=float)
-for (j, connected_nodes) in enumerate(adj_list):
-    if connected_nodes: # non-empty
-        P[connected_nodes, j] = 1.0 / len(connected_nodes)
-    else: # dangling node
-        P[:, j] = 1.0 / n
-return P
-\end{lstlisting}
+\lstinputlisting[language=Python, numbers=left, firstline=3, lastline=12]{pagerank.py}
 
->>>>>>> bde9a464dbc3e8387a9f364918c72728e3ac163b
 % \section{Results}
 
 \section{Conclusion}
