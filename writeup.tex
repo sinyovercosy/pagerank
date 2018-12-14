@@ -246,19 +246,7 @@ The next theorem uses the fact that all of the eigenvectors $\lambda_i$ for $1<i
     (Power Method Convergence Theorem) Let $M$ be a $n\times n$ positive column-stochastic matrix, with $\vec{v}^*$ denosting the probabilstic vector corresponding to 1. Let $z$ be the column vector with all entries equal to $\frac{1}{n}$. Then the sequence $z, Mz, \cdots, M^kz$ as $k\to \infty$ converges to $\vec{v}^*$.    
 \end{theorem}
 
-\begin{lstlisting}[language=python, basicstyle={\small\ttfamily}, numbers=left]
-def build_prob_matrix(adj_list):
-# number of nodes
-n = len(adj_list)
-P = np.zeros((n,n), dtype=float)
-for (j, connected_nodes) in enumerate(adj_list):
-    if connected_nodes: # non-empty
-        P[connected_nodes, j] = 1.0 / len(connected_nodes)
-    else: # dangling node
-        P[:, j] = 1.0 / n
-return P
-\end{lstlisting}
-
+\lstinputlisting[language=Python, numbers=left, firstline=3, lastline=12]{pagerank.py}
 % \section{Results}
 
 \section{Conclusion}
