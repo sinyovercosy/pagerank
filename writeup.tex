@@ -285,7 +285,7 @@ but upon reaching a dangling node, the web surfer has equal probability of trans
 
 Below is the Python code used to construct $P$ from an adjacency list representation of the graph of webpages.
 
-\lstinputlisting[language=Python, firstline=3, lastline=12]{pagerank.py}
+\lstinputlisting[language=Python, firstline=6, lastline=15]{pagerank.py}
 
 % observe that now P is column stochastic by construction
 % but P not necessarily positive!
@@ -324,37 +324,50 @@ Note that the variable \texttt{d} used in the below code snippet is equal to $1-
 This simply means that \texttt{d} represents the probability of the web surfer following the links on a webpage instead of randomly jumping.
 As per Page and Brin, \texttt{d} is defined to have a default value of $0.85$.
 
-\lstinputlisting[language=Python, firstline=13]{pagerank.py}
+\lstinputlisting[language=Python, firstline=21]{pagerank.py}
 
 % \section{Results}
 
 \section{Conclusion}
 % what we wanted to accomplish
-The PageRank algorithm is a method for computing the relevancy of webpages based on the number of in-bound links to each webpage. In this way, the rank of a webpage is determined based on its popularity and authority of the pages linked to it.
+The PageRank algorithm is a method for computing the relevancy of webpages based on the number of in-bound links to each webpage.
+In this way, the rank of a webpage is determined based on its popularity and authority of the pages linked to it.
+
 % how we did it
-We first create a directed graph of the webpages and the links between them, storing the graph as an adjacency matrix $A$. We then create the Markov transition matrix $P$ for random walks on the graph using the information in $A$, and create the positive column-stochastic matrix $M$ using $P$ and the probability of a web surfer ``jumpiing" to another page.
-We initialize all of the webpage ranks in the matrix $v_0$ as $\frac{1}{n}$, and then iteratively reassign ranks based on the Markov chain represented by $P$ until $M^tv_0$ converges to a stable probabilistic vector, which is the desired vector of rankings.
-% future possible improvements:
+We first create a directed graph of the webpages and the links between them, storing the graph as an adjacency matrix $A$.
+We then create the Markov transition matrix $P$ for random walks on the graph using the information in $A$,
+and create the positive column-stochastic matrix $M$ using $P$ and the probability of a web surfer ``jumping'' to another page.
+Lastly, we found the probablistic eigenvector of $M$ corresponding to eigenvalue 1, which we proved to be equal to the limit $\lim\limits_{t\to \infty}{M^t \vec{v}_0}$, which is the desired PageRank vector.
+
+% future possible improvements
 %  > approximating limit prob e-vect with power method (why efficient?)
 %  > using sparse multiplication (why is M sparse?)
-Although the average number of iterations to find the PageRank vector is usually not very large, there are still a large number of computations involved in repeatedly multiplying matrices together.
-If the columns of $M$ are all linearly independent, we can create a diagonalization for $M$ and then approximate the probabilistic eigenvector corresponding to 1 using the power method. This would be more efficient since repeatedly muliplying a diagonalized matrix is equivalent to taking powers of the diagonal matrix of eigenvalues, which is a relatively cheaper computation.
-Realistically, we can expect $A$ to be sparse since webpages and their links would not create a complete directed graph. If we redefine how to construct $P$ and $M$ such that we still handle dangling nodes and reducible web graphs, we can then utilize sparse multiplication to decrease computation costs. However, we would then lose the ability to invoke Perron-Frobenius theorem since $M$ being sparse necessarily forces $M$ to be non-negative, not positive.
+However, realistically, when the number of webpages in the graph is very large, it is often inefficient to compute the eigenvector corresponding to the eigenvalue 1.
+A more feasible method of finding the PageRank vector would be to approximate it by repeatedly taking steps of the random walk.
+We can start with $\vec{v}_0$ having $\frac1n$ as its components, and repeatedly computing $\vec{v}_{t+1} = M \vec{v}_t$, until the difference between $\vec{v}_{t+1}$ and $\vec{v}_t$ is not significant.
+On average, the number of iterations it takes for the above algorithm to converge to the PageRank vector within reasonable error is usually not very large.
+% If the columns of $M$ are all linearly independent, we can create a diagonalization for $M$ and then approximate the probabilistic eigenvector corresponding to 1 using the power method. This would be more efficient since repeatedly muliplying a diagonalized matrix is equivalent to taking powers of the diagonal matrix of eigenvalues, which is a relatively cheaper computation.
+
+Even then, there are still a large number of computations involved in repeatedly multiplying matrices together.
+Realistically, we can expect $A$ and thus $P$ to be sparse since webpages and their links would not usually create a complete directed graph.
+Thus we can compute $M \vec{v}_t$ as $(1-d) P \vec{v}_t + \frac{d}{n} \vec{1}_{n \times n} \vec{v}_t $, utilizing sparse multiplication for $P \vec{v}_t$ to decrease computation costs,
+since $\vec{1}_{n \times n} \vec{v}_t = \vec{1}_{n \times 1}$ as the sum of the components of $\vec{v}_t$ is equal to 1 by definition.
+
 We also note that this formulation of PageRank does not account for any of the content in the webpages, only their popularity and authority. Augmenting the model with a feature that allows for determining relevancy based on keywords like text-based ranking systems could further improve determining the relevancy of webpages.
 
 \begin{thebibliography}{9}
-\bibitem{}
+\bibitem{1}
 How Google works: Markov chains and eigenvalues. (2015, May 30). The Klein Project. http://blog.kleinproject.org/?author=1. Accessed 14 December 2018.
 
-\bibitem{}
+\bibitem{2}
 Shum, K. (2013, March 4). Notes on PageRank Algorithm. Chinese University of Hong Kong. http://home.ie.cuhk.edu.hk/~wkshum/papers/pagerank.pdf. Accessed 14 December 2018.
 
-\bibitem{}
+\bibitem{3}
 Tanase, R., \& Radu, R. (2009). Lecture \#3: PageRank Algorithm - The Mathematics of Google Search.
 \textit{The Mathematics of Web Search.} Cornell University. 
 http://pi.math.cornell.edu/~mec/Winter2009/RalucaRemus/Lecture3/lecture3.html. Accessed 14 December 2018.
 
-\bibitem{}
+\bibitem{4}
 Wikipedia contributors. (2018). Stochastic process. Wikipedia, The Free Encyclopedia. https://en.wikipedia.org/wiki/Stochastic\_process. Accessed 14 December 2018.
 
 \end{thebibliography}

@@ -1,5 +1,8 @@
 import numpy as np
 
+# function: build_prob_matrix
+# inputs:   adj_list    a direct graph of webpages represented as an adjancency list as a Python list of lists
+# outputs:  P           a column-stochastic matrix representing a random walk of the webpages as a Markov chain
 def build_prob_matrix(adj_list):
     # number of nodes
     n = len(adj_list)
@@ -11,6 +14,10 @@ def build_prob_matrix(adj_list):
             P[:, j] = 1.0 / n
     return P
 
+# function: rank
+# inputs:   links       a direct graph of webpages represented as an adjancency list as a Python list of lists
+#           d           prob. of web surfer to follow links over random jump, 1 minus the damping factor, default 0.85
+# outputs:  a Python list of the webpages sorted in descending order of relevance.
 def rank(links, d=0.85):
     n = len(links)
     P = build_prob_matrix(links)
